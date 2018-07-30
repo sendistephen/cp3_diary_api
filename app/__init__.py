@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_jwt_extended import JWTManager
 from flask_restful import Api
+from dbconnection import Connection
 
 from config import app_config
 from app.views import RegisterResource
@@ -12,6 +13,9 @@ def create_app(config_name):
     # instantiate flask app
     my_app = Flask(__name__, instance_relative_config=True)
     my_app.config.from_object(app_config[config_name])
+
+    connection = Connection()
+    connection.create_tables()
 
     return my_app
 

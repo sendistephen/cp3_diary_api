@@ -27,9 +27,5 @@ class Connection:
 
     def trancate_table(self, table):
         """Trancates the table"""
-        self.cursor.execute("TRUNCATE TABLE {} RESTART IDENTITY cascade ".format(table))
-
-
-if __name__ == "__main__":
-    connection = Connection()
-    connection.create_tables()
+        self.cursor.execute(
+            "TRUNCATE TABLE {} RESTART IDENTITY cascade ".format(table))
