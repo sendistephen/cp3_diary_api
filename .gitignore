@@ -1,2 +1,7 @@
 .idea/
 venv/
+.idea
+.vscode/
+.pytest_cache/
+__pycache__/
+app/__pycache__/
