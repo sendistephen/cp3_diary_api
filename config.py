@@ -28,7 +28,8 @@ class DevelopmentConfig(Config):
 class TestingConfig(Config):
     """Testing configurations"""
     DEBUG = True
-    DATABASE_URI = 'postgres://admin:admin@localhost:5432/test_db'
+    # DATABASE_URI = 'postgres://admin:admin@localhost:5432/test_db'
+    DATABASE_URI ='postgresql://localhost/test_db'
 
 
 app_config = {
