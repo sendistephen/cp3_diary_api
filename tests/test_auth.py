@@ -39,3 +39,12 @@ class AuthTestCase(BaseTestCase):
             self.assertEqual(response.status_code, 400)
             self.assertEqual(result.get('message'),
                              'Please enter a valid username.')
+
+    def test_password_cannot_be_whitespace_or_shorter_than_5_characters(self):
+        """Tests username can not be less than 5 characters in length"""
+        with self.client:
+            response = self.register_user('Odongo', 'test2@test.com', 'df')
+            result = json.loads(response.data.decode())
+            self.assertEqual(response.status_code, 400)
+            self.assertEqual(result.get('message'),
+                             'Please enter a valid password.')
