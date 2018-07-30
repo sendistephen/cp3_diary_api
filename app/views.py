@@ -1,22 +1,26 @@
 from flask_restful import Resource, reqparse
 from flask import jsonify, make_response
-from pytz import utc
 
 from dbconnection import Connection
 import re
-from datetime import datetime
 from app.models import User
 
 connection = Connection()
 
 
 class RegisterResource(Resource):
-    @staticmethod
-    def post():
+    """ Defines endpoints for method calls for a user
+        methods: GET, POST
+        url: /api/auth/register
+        url: /api/auth/login
+     """
+
+    def post(self):
+        """Handles registration of a new user"""
         parser = reqparse.RequestParser()
-        parser.add_argument('username', type=str)
-        parser.add_argument('email', type=str)
-        parser.add_argument('password', type=str)
+        parser.add_argument('username', type=str, required=True)
+        parser.add_argument('email', type=str, required=True)
+        parser.add_argument('password', type=str, required=True)
 
         args = parser.parse_args()
         username = args['username']
