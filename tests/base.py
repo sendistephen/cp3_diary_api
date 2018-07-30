@@ -1,18 +1,19 @@
 import json
 import unittest
-from app import app, app_config
+from app import create_app, app_config
 
 from dbconnection import Connection
 
 
 class BaseTestCase(unittest.TestCase):
     """Handles basic configurations for unit tests"""
-    
+
     def setUp(self):
         """Runs its code before every single test"""
+        # my_app.config.from_object(app_config['testing'])
+        self.app = create_app(config_name='testing')
         # Initialize the test client
-        self.client = app.test_client(self)
-        app.config.from_object(app_config['testing'])
+        self.client = self.app.test_client(self)
         db = Connection()
         db.create_tables()
 
