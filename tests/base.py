@@ -6,14 +6,8 @@ from dbconnection import Connection
 
 
 class BaseTestCase(unittest.TestCase):
-    @staticmethod
-    def create_app():
-        """
-         Create an instance of the app with the testing configurations
-        """
-        app.config.from_object(app_config['testing'])
-        return app
-
+    """Handles basic configurations for unit tests"""
+    
     def setUp(self):
         """Runs its code before every single test"""
         # Initialize the test client
