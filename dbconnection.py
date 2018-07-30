@@ -7,15 +7,14 @@ class Connection:
     """Method handles database connection"""
 
     def __init__(self):
-        self.cursor = None
-        try:
-            self.connection = psycopg2.connect(
-                "dbname = diary_db user=admin password=admin host=localhost port=5432")
-            self.connection.autocommit = True
-            self.cursor = self.connection.cursor()
-            pprint("Connection successfull")
-        except:
-            pprint("Connection to db has failed.")
+        # try:
+        self.connection = psycopg2.connect(
+            "dbname = diary_db user=admin password=admin host=localhost port=5432")
+        self.connection.autocommit = True
+        self.cursor = self.connection.cursor()
+        pprint("Connection successfull")
+        # except:
+        #     pprint("Connection to db has failed.")
 
     def create_tables(self):
         """This method handles creation of database tables"""
