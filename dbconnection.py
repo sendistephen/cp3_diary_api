@@ -1,6 +1,6 @@
 from pprint import pprint
 
-from psycopg2 import connect
+import psycopg2
 
 
 class Connection:
@@ -8,7 +8,7 @@ class Connection:
 
     def __init__(self):
         try:
-            self.connection = connect(
+            self.connection = psycopg2.connect(
                 "dbname = diary_db user=admin password=admin host=localhost port=5432")
             self.connection.autocommit = True
             self.cursor = self.connection.cursor()
