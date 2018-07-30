@@ -29,3 +29,13 @@ class AuthTestCase(BaseTestCase):
             self.assertEqual(response.status_code, 400)
             self.assertEqual(result.get('message'),
                              'Please enter a valid email.')
+
+    def test_username_contains_whitespace(self):
+        """Tests user can register with whitespaces on username"""
+        with self.client:
+            response = self.register_user(
+                'se', 'test2@test.com', 'testpassword')
+            result = json.loads(response.data.decode())
+            self.assertEqual(response.status_code, 400)
+            self.assertEqual(result.get('message'),
+                             'Please enter a valid username.')
