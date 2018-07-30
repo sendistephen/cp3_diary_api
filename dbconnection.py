@@ -7,6 +7,7 @@ class Connection:
     """Method handles database connection"""
 
     def __init__(self):
+        self.cursor = None
         try:
             self.connection = psycopg2.connect(
                 "dbname = diary_db user=admin password=admin host=localhost port=5432")
