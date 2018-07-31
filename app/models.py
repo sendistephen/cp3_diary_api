@@ -83,10 +83,17 @@ class Entry:
         connection.cursor.execute(query_select_entry, [title, user_id])
         row = connection.cursor.fetchone()
         return row
-   
+
     @staticmethod
     def get_all_entries(user_id):
         query_select_all_entries = "SELECT * FROM entries WHERE user_id = %s"
-        connection.cursor.execute(query_select_all_entries,[user_id])
+        connection.cursor.execute(query_select_all_entries, [user_id])
         rows = connection.cursor.fetchall()
-        return [{'id': row[0], 'title':row[2],'notes':row[2]} for row in rows]
+        return [{'id': row[0], 'title':row[2], 'notes':row[3], 'date-created':row[4]} for row in rows]
+
+    @staticmethod
+    def get_user_entry_by_id(entry_id, user_id):
+        query_to_get_single_entry = "SELECT * FROM entries WHERE entry_id= %s AND user_id=%s"
+        connection.cursor.execute(query_to_get_single_entry, (entry_id, user_id))
+        row = connection.cursor.fetchone()
+        return [{'id': row[0],'title': row[2], 'notes':row[3], 'date-created':row[4]}]
