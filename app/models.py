@@ -83,3 +83,10 @@ class Entry:
         connection.cursor.execute(query_select_entry, [title, user_id])
         row = connection.cursor.fetchone()
         return row
+   
+    @staticmethod
+    def get_all_entries(user_id):
+        query_select_all_entries = "SELECT * FROM entries WHERE user_id = %s"
+        connection.cursor.execute(query_select_all_entries,[user_id])
+        rows = connection.cursor.fetchall()
+        return [{'id': row[0], 'title':row[2],'notes':row[2]} for row in rows]
