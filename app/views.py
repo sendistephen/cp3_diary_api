@@ -89,6 +89,15 @@ class EntryListResource(Resource):
 
         date_created = datetime.now(utc)
 
+        # validate user input here
+        if len(title.strip()) < 4:
+              return make_response(jsonify(
+            {'message': 'Please enter a valid entry.'}), 400)
+
+        if len(notes.strip()) < 5:
+              return make_response(jsonify(
+            {'message': 'Please enter notes with atleast 5 characters.'}), 400)
+
         if not title_exists:
             Entry.create_entry(user_id[0], title, notes, str(date_created))
             return make_response(jsonify({
