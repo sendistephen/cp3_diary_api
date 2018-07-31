@@ -104,3 +104,16 @@ class EntryListResource(Resource):
                 'message': 'Entry recorded successfully.'}), 201)
         return make_response(jsonify(
             {'message': 'Cannot have entries with the same title.'}), 400)
+   
+    @jwt_required
+    def get(self):
+        """Returns all user entries"""
+        user_id = get_jwt_identity()
+
+        entries = Entry.get_all_entries(user_id[0])
+        if entries:
+            return make_response(jsonify({'Entries': entries}), 200)
+        else:
+            return make_response(jsonify({'message': 'You dont have any entries at the moment'}))
+
+        
