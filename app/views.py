@@ -46,11 +46,10 @@ class RegisterResource(Resource):
 
 
 class LoginResource(Resource):
-    @staticmethod
-    def post():
+    def post(self):
         parser = reqparse.RequestParser()
-        parser.add_argument('email', type=str)
-        parser.add_argument('password', type=str)
+        parser.add_argument('email', type=str, required=True)
+        parser.add_argument('password', type=str, required=True)
 
         args = parser.parse_args()
         email = args['email']
