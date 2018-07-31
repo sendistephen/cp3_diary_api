@@ -15,7 +15,7 @@ class Connection:
         host = parsed_url.hostname
         password = parsed_url.password
         port = parsed_url.port
-        
+
         self.connection = psycopg2.connect(
             database=dbname, user=user, password=password, host=host, port=port)
         self.connection.autocommit = True
@@ -29,6 +29,12 @@ class Connection:
         query_table_user = "CREATE TABLE IF NOT EXISTS\
         users(user_id SERIAL PRIMARY KEY ,username text, email text, password text)"
         self.cursor.execute(query_table_user)
+
+        query_table_entries = "CREATE TABLE IF NOT EXISTS\
+        entries(entry_id SERIAL PRIMARY KEY, user_id INTEGER," \
+                              "title text, notes text, date_created timestamp," \
+                              " FOREIGN KEY (user_id) REFERENCES users (user_id))"
+        self.cursor.execute(query_table_entries)
 
         self.connection.commit()
         self.connection.close()
