@@ -114,6 +114,6 @@ class EntryListResource(Resource):
         if entries:
             return make_response(jsonify({'Entries': entries}), 200)
         else:
-            return make_response(jsonify({'message': 'You dont have any entries at the moment'}))
+            return make_response(jsonify({'message': 'You dont have any entries at the moment'}), 200)
 
         
