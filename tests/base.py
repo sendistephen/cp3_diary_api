@@ -41,3 +41,21 @@ class BaseTestCase(unittest.TestCase):
                 email=email,
                 password=password
             )), content_type='application/json')
+
+ # ------------------------Create Entry--------------------------------#
+    def create_entry(self, title, notes):
+        return self.client.post(
+            'api/v2/entries',
+            data=json.dumps(dict(
+                title=title,
+                notes=notes
+            )), content_type='application/json', headers=self.generate_token())
+
+    def generate_token(self):
+        self.register_user('katikiro', 'sendi@gmail.com', 'password')
+        response = self.login_user("sendi@gmail.com", "password")
+        result = json.loads(response.data.decode())
+
+        token = result['access_token']
+        authorization = {'Authorization': 'Bearer {}'.format(token)}
+        return authorization
