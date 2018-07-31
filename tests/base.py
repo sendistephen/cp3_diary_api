@@ -51,6 +51,12 @@ class BaseTestCase(unittest.TestCase):
                 notes=notes
             )), content_type='application/json', headers=self.generate_token())
 
+    def get_all_entries(self):
+        return self.client.get(
+            'api/v2/entries', content_type='application/json',
+            headers=self.generate_token()
+        )
+
     def generate_token(self):
         self.register_user('katikiro', 'sendi@gmail.com', 'password')
         response = self.login_user("sendi@gmail.com", "password")

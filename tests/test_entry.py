@@ -47,3 +47,17 @@ class EntriesTestCase(BaseTestCase):
             self.assertEqual(response.status_code, 400)
             self.assertEqual(result.get('message'),
                              'Please enter notes with atleast 5 characters.')
+
+    def test_retrieve_all_entries(self):
+        """Test all entries can be retrieved successfully"""
+        with self.client:
+            # Create an entry first
+            self.create_entry(
+                "Meeting with CEO Andela",
+                "Discuss about marketing strategies")
+
+            # retrieve the created entry
+            response = self.get_all_entries()
+
+            # verify that the result is success with 200 status code
+            self.assertEqual(response.status_code, 200)
