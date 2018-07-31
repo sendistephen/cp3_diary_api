@@ -4,7 +4,7 @@ from flask_restful import Api
 from dbconnection import Connection
 
 from config import app_config
-from app.views import RegisterResource
+from app.views import RegisterResource, LoginResource
 
 
 def create_app(config_name):
@@ -23,4 +23,6 @@ def create_app(config_name):
     connection.create_tables()
 
     api.add_resource(RegisterResource, '/api/v2/auth/register')
+    api.add_resource(LoginResource, '/api/v2/auth/login')
+
     return my_app

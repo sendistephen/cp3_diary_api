@@ -4,7 +4,7 @@ from tests.base import BaseTestCase
 
 
 class AuthTestCase(BaseTestCase):
-    # @unittest.skip('checking')
+    @unittest.skip('checking')
     def test_user_registers_successfully(self):
         """Tests user can register successfully through the api"""
         with self.client:
@@ -48,3 +48,13 @@ class AuthTestCase(BaseTestCase):
             self.assertEqual(response.status_code, 400)
             self.assertEqual(result.get('message'),
                              'Please enter a valid password.')
+
+    def test_login_user_successfully(self):
+        with self.client:
+            self.register_user('Kakaire', 'test@test.com', 'testpassword')
+            response = self.login_user('test@test.com', 'testpassword')
+            result = json.loads(response.data.decode())
+            self.assertEqual(response.status_code, 200)
+            self.assertTrue(result['access_token'])
+            self.assertEqual(result.get('message'),
+                             'Congratulations. Login successfully.')
