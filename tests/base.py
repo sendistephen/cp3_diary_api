@@ -10,16 +10,15 @@ class BaseTestCase(unittest.TestCase):
 
     def setUp(self):
         """Runs its code before every single test"""
-        # my_app.config.from_object(app_config['testing'])
-        self.app = create_app(config_name='testing')
+        self.app = create_app('testing')
         # Initialize the test client
         self.client = self.app.test_client(self)
-        db = Connection()
+        db = Connection('postgres://admin:admin@localhost:5432/test_db')
         db.create_tables()
 
     def tearDown(self):
         """Drop any stored data in the list after every single test runs"""
-        db = Connection()
+        db = Connection('postgres://admin:admin@localhost:5432/test_db')
         db.trancate_table("users")
         db.trancate_table("entries")
 
@@ -34,3 +33,4 @@ class BaseTestCase(unittest.TestCase):
                 email=email,
                 password=password
             )), content_type='application/json')
+    

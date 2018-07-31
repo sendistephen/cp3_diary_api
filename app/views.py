@@ -5,7 +5,7 @@ from dbconnection import Connection
 import re
 from app.models import User
 
-connection = Connection()
+connection = Connection('postgres://admin:admin@localhost:5432/diary_db')
 
 
 class RegisterResource(Resource):

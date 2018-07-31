@@ -1,4 +1,5 @@
 from pprint import pprint
+from urllib.parse import urlparse
 
 import psycopg2
 
@@ -6,10 +7,17 @@ import psycopg2
 class Connection:
     """Method handles database connection"""
 
-    def __init__(self):
+    def __init__(self, database_url):
         # try:
+        parsed_url = urlparse(database_url)
+        dbname = parsed_url.path[1:]
+        user = parsed_url.username
+        host = parsed_url.hostname
+        password = parsed_url.password
+        port = parsed_url.port
+        
         self.connection = psycopg2.connect(
-            "dbname = diary_db user=admin password=admin host=localhost port=5432")
+            database=dbname, user=user, password=password, host=host, port=port)
         self.connection.autocommit = True
         self.cursor = self.connection.cursor()
         pprint("Connection successfull")
