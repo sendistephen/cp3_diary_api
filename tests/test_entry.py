@@ -36,3 +36,14 @@ class EntriesTestCase(BaseTestCase):
             self.assertEqual(response.status_code, 400)
             self.assertEqual(result.get('message'),
                              'Please enter a valid entry.')
+
+    def test_entry_notes_is_black_or_has_few_characters(self):
+        with self.client:
+            self.login_user("test@test.com", "password")
+            response = self.create_entry(
+                'Meeting with the Bootcamp fellows',
+                'Dis')
+            result = json.loads(response.data.decode())
+            self.assertEqual(response.status_code, 400)
+            self.assertEqual(result.get('message'),
+                             'Please enter notes with atleast 5 characters.')
