@@ -61,3 +61,10 @@ class EntriesTestCase(BaseTestCase):
 
             # verify that the result is success with 200 status code
             self.assertEqual(response.status_code, 200)
+    
+    def test_user_has_no_entries(self):
+        with self.client:
+            response = self.get_all_entries()
+            self.assertEqual(response.status_code, 200)
+            result = json.loads(response.data.decode())
+            self.assertTrue(result, None)
