@@ -33,4 +33,11 @@ class BaseTestCase(unittest.TestCase):
                 email=email,
                 password=password
             )), content_type='application/json')
-    
+
+    def login_user(self, email, password):
+        return self.client.post(
+            'api/v2/auth/login',
+            data=json.dumps(dict(
+                email=email,
+                password=password
+            )), content_type='application/json')

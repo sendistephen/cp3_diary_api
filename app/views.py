@@ -1,6 +1,6 @@
 from flask_restful import Resource, reqparse
 from flask import jsonify, make_response
-
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from dbconnection import Connection
 import re
 from app.models import User
@@ -43,3 +43,29 @@ class RegisterResource(Resource):
             return make_response(jsonify({'message': 'User successfully registered.'}), 201)
 
         return make_response(jsonify({'message': 'Email already taken.'}), 400)
+
+
+class LoginResource(Resource):
+    @staticmethod
+    def post():
+        parser = reqparse.RequestParser()
+        parser.add_argument('email', type=str)
+        parser.add_argument('password', type=str)
+
+        args = parser.parse_args()
+        email = args['email']
+        password = args['password']
+
+        email_exists = User.email_exists(email)
+        valid_password = User.valid_password(password)
+
+        if email_exists and valid_password:
+            access_token = create_access_token(
+                identity=email_exists)
+            return make_response(jsonify({
+                'message': 'Congratulations. Login successfully.',
+                'access_token': access_token}), 200)
+
+        return make_response(jsonify({
+            'message': 'Email or password is invalid. Enter valid credentials'}
+        ), 400)
