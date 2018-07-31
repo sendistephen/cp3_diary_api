@@ -52,3 +52,34 @@ class User:
         connection.cursor.execute(select_password_query, [password])
         row = connection.cursor.fetchone()
         return row
+
+
+class Entry:
+    def __init__(self, entry_id, user_id, title, notes):
+        self.id = entry_id
+        self.user_id = user_id
+        self.title = title
+        self.notes = notes
+        self.date_created = datetime.now(utc)
+
+    def json(self):
+        return json.dumps({
+            'id': self.id,
+            'user_id': self.user_id,
+            'title': self.title,
+            'notes': self.notes,
+            'date_created': self.date_created
+        })
+
+    @staticmethod
+    def create_entry(user_id, title, notes, date_created):
+        query_create_entry = "INSERT INTO entries(user_id, title, notes, date_created) VALUES (%s,%s,%s,%s)"
+        connection.cursor.execute(
+            query_create_entry, (user_id, title, notes, date_created))
+
+    @staticmethod
+    def get_entry_title(title, user_id):
+        query_select_entry = "SELECT title FROM entries WHERE title = %s AND user_id = %s"
+        connection.cursor.execute(query_select_entry, [title, user_id])
+        row = connection.cursor.fetchone()
+        return row

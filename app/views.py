@@ -3,7 +3,9 @@ from flask import jsonify, make_response
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from dbconnection import Connection
 import re
-from app.models import User
+from datetime import datetime
+from pytz import utc
+from app.models import User, Entry
 
 connection = Connection('postgres://admin:admin@localhost:5432/diary_db')
 
@@ -68,3 +70,37 @@ class LoginResource(Resource):
         return make_response(jsonify({
             'message': 'Email or password is invalid. Enter valid credentials'}
         ), 400)
+
+
+class EntryListResource(Resource):
+    @jwt_required
+    def post(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('title', type=str)
+        parser.add_argument('notes', type=str)
+
+        args = parser.parse_args()
+        title = args['title']
+        notes = args['notes']
+
+        user_id = get_jwt_identity()
+
+        title_exists = Entry.get_entry_title(title, user_id[0])
+
+        date_created = datetime.now(utc)
+
+        # validate user input here
+        if len(title.strip()) < 4:
+              return make_response(jsonify(
+            {'message': 'Please enter a valid entry.'}), 400)
+
+        if len(notes.strip()) < 5:
+              return make_response(jsonify(
+            {'message': 'Please enter notes with atleast 5 characters.'}), 400)
+
+        if not title_exists:
+            Entry.create_entry(user_id[0], title, notes, str(date_created))
+            return make_response(jsonify({
+                'message': 'Entry recorded successfully.'}), 201)
+        return make_response(jsonify(
+            {'message': 'Cannot have entries with the same title.'}), 400)
