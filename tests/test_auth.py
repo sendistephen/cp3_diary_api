@@ -58,3 +58,13 @@ class AuthTestCase(BaseTestCase):
             self.assertTrue(result['access_token'])
             self.assertEqual(result.get('message'),
                              'Congratulations. Login successfully.')
+
+    def test_login_user_wrong_password_or_email(self):
+        with self.client:
+            self.register_user('Moses', 'moses@test.com', 'password')
+            response = self.login_user('test1@test.com', 'password')
+            result = json.loads(response.data.decode())
+            self.assertEqual(response.status_code, 400)
+            # self.assertTrue(result['access_token'])
+            self.assertEqual(result.get('message'),
+                             'Email or password is invalid. Enter valid credentials')
