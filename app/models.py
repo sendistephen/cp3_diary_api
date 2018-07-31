@@ -38,3 +38,17 @@ class User:
         connection.cursor.execute(select_query, [email])
         row = connection.cursor.fetchone()
         return row
+
+    @staticmethod
+    def find_user_by_id(user_id):
+        select_user_query = "SELECT * FROM users WHERE user_id = %s"
+        connection.cursor.execute(select_user_query, [user_id])
+        row = connection.cursor.fetchone()
+        return row
+
+    @staticmethod
+    def valid_password(password):
+        select_password_query = "SELECT * FROM users WHERE password = %s"
+        connection.cursor.execute(select_password_query, [password])
+        row = connection.cursor.fetchone()
+        return row
