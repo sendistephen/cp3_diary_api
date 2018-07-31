@@ -91,12 +91,12 @@ class EntryListResource(Resource):
 
         # validate user input here
         if len(title.strip()) < 4:
-              return make_response(jsonify(
-            {'message': 'Please enter a valid entry.'}), 400)
+            return make_response(jsonify(
+                {'message': 'Please enter a valid entry.'}), 400)
 
         if len(notes.strip()) < 5:
-              return make_response(jsonify(
-            {'message': 'Please enter notes with atleast 5 characters.'}), 400)
+            return make_response(jsonify(
+                {'message': 'Please enter notes with atleast 5 characters.'}), 400)
 
         if not title_exists:
             Entry.create_entry(user_id[0], title, notes, str(date_created))
@@ -104,7 +104,7 @@ class EntryListResource(Resource):
                 'message': 'Entry recorded successfully.'}), 201)
         return make_response(jsonify(
             {'message': 'Cannot have entries with the same title.'}), 400)
-   
+
     @jwt_required
     def get(self):
         """Returns all user entries"""
@@ -116,4 +116,19 @@ class EntryListResource(Resource):
         else:
             return make_response(jsonify({'message': 'You dont have any entries at the moment'}), 200)
 
-        
+
+class EntryResource(Resource):
+    """ Defines endpoints for method calls for a entry
+        methods: GET, PUT, DELETE 
+        url: /api/v2/entries/<entry_id>
+     """
+
+    @jwt_required
+    def get(self, entry_id):
+        """Returns a single users entry"""
+        user_id = get_jwt_identity()
+        entry = Entry.get_user_entry_by_id(entry_id, user_id[0])
+        if entry:
+            return make_response(jsonify({'Entry': entry}), 200)
+        else:
+            return make_response(jsonify({'message': 'Entry with that id not found'}), 200)
