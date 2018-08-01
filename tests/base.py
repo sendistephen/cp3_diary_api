@@ -1,7 +1,8 @@
 import json
 import unittest
-from app import create_app, app_config
-
+from app import create_app
+from flask import Flask
+from config import app_config
 from dbconnection import Connection
 
 
@@ -10,9 +11,10 @@ class BaseTestCase(unittest.TestCase):
 
     def setUp(self):
         """Runs its code before every single test"""
-        self.app = create_app('testing')
         # Initialize the test client
-        self.client = self.app.test_client(self)
+        
+        self.app = create_app()
+        self.client = self.app.test_client()
         db = Connection('postgres://admin:admin@localhost:5432/test_db')
         db.create_tables()
 
@@ -33,7 +35,7 @@ class BaseTestCase(unittest.TestCase):
                 email=email,
                 password=password
             )), content_type='application/json')
-
+            
     def login_user(self, email, password):
         return self.client.post(
             'api/v2/auth/login',
@@ -42,7 +44,7 @@ class BaseTestCase(unittest.TestCase):
                 password=password
             )), content_type='application/json')
 
- # ------------------------Create Entry--------------------------------#
+    #------------------------Create Entry--------------------------------#
     def create_entry(self, title, notes):
         return self.client.post(
             'api/v2/entries',
@@ -65,3 +67,5 @@ class BaseTestCase(unittest.TestCase):
         token = result['access_token']
         authorization = {'Authorization': 'Bearer {}'.format(token)}
         return authorization
+if __name__=='__main__':
+    unittest.main()
