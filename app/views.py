@@ -1,13 +1,12 @@
 from flask_restful import Resource, reqparse
 from flask import jsonify, make_response
-from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
+from flask_jwt_extended import (create_access_token,
+                                jwt_required, get_jwt_identity)
 from dbconnection import Connection
 import re
 from datetime import datetime
 from pytz import utc
 from app.models import User, Entry
-
-connection = Connection('postgres://admin:admin@localhost:5432/diary_db')
 
 
 class RegisterResource(Resource):
@@ -32,19 +31,24 @@ class RegisterResource(Resource):
         email_exists = User.email_exists(email)
 
         if not re.match(r"([\w\.-]+)@([\w\.-]+)(\.[\w\.]+$)", email):
-            return make_response(jsonify({'message': 'Please enter a valid email.'}), 400)
+            return make_response(jsonify({
+                'message': 'Please enter a valid email.'}), 400)
 
         if username.strip() == '' or len(username.strip()) < 3:
-            return make_response(jsonify({'message': 'Please enter a valid username.'}), 400)
+            return make_response(jsonify({
+                'message': 'Please enter a valid username.'}), 400)
 
         if password.strip() == '' or len(password.strip()) < 5:
-            return make_response(jsonify({'message': 'Please enter a valid password.'}), 400)
+            return make_response(jsonify({
+                'message': 'Please enter a valid password.'}), 400)
 
         if not email_exists:
             User.create_user_account(username, email, password)
-            return make_response(jsonify({'message': 'User successfully registered.'}), 201)
+            return make_response(jsonify({
+                'message': 'User successfully registered.'}), 201)
 
-        return make_response(jsonify({'message': 'Email already taken.'}), 400)
+        return make_response(jsonify({
+            'message': 'Email already taken.'}), 400)
 
 
 class LoginResource(Resource):
@@ -76,8 +80,8 @@ class EntryListResource(Resource):
     @jwt_required
     def post(self):
         parser = reqparse.RequestParser()
-        parser.add_argument('title', type=str)
-        parser.add_argument('notes', type=str)
+        parser.add_argument('title', type=str, required=True)
+        parser.add_argument('notes', type=str, required=True)
 
         args = parser.parse_args()
         title = args['title']
@@ -96,7 +100,8 @@ class EntryListResource(Resource):
 
         if len(notes.strip()) < 5:
             return make_response(jsonify(
-                {'message': 'Please enter notes with atleast 5 characters.'}), 400)
+                {'message': 'Please enter notes with atleast 5 characters.'}),
+                400)
 
         if not title_exists:
             Entry.create_entry(user_id[0], title, notes, str(date_created))
@@ -114,12 +119,14 @@ class EntryListResource(Resource):
         if entries:
             return make_response(jsonify({'Entries': entries}), 200)
         else:
-            return make_response(jsonify({'message': 'You dont have any entries at the moment'}), 200)
+            return make_response(jsonify({
+                'message': 'You dont have any entries at the moment'}),
+                200)
 
 
 class EntryResource(Resource):
     """ Defines endpoints for method calls for a entry
-        methods: GET, PUT, DELETE 
+        methods: GET, PUT, DELETE
         url: /api/v2/entries/<entry_id>
      """
 
@@ -131,4 +138,25 @@ class EntryResource(Resource):
         if entry:
             return make_response(jsonify({'Entry': entry}), 200)
         else:
-            return make_response(jsonify({'message': 'Entry with that id not found'}), 200)
+            return make_response(jsonify({
+                'message': 'Entry with that id not found'}), 200)
+
+    @jwt_required
+    def put(self, entry_id):
+        """Handles update of a single entry"""
+
+        parser = reqparse.RequestParser()
+        parser.add_argument('title', type=str, required=True)
+        parser.add_argument('notes', type=str, required=True)
+
+        args = parser.parse_args()
+        title = args['title']
+        notes = args['notes']
+
+        user_id = get_jwt_identity()
+
+        update = Entry.update_user_entry(user_id[0], entry_id, title, notes)
+        print(update)
+
+        return make_response(jsonify({
+            'message': 'Entry updated successfully.'}), 201)

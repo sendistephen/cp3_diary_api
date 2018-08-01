@@ -12,7 +12,6 @@ class Config(object):
     JWT_SECRET_KEY = "The lord is good."
     DEBUG = False
     TESTING = False
-    # DATABASE_URI = 'postgres://admin:admin@localhost:5432/diary_db'
 
 class ProductionConfig(Config):
     """Production configurations"""
@@ -30,8 +29,9 @@ class TestingConfig(Config):
     """Testing configurations"""
     TESTING = True
     DEBUG = True
-    DATABASE_URI = 'postgres://admin:admin@localhost:5432/test_db'
+
     # DATABASE_URI ='postgresql://localhost/test_db'
+    DATABASE_URI='postgres://admin:admin@localhost:5432/test_db'
 
 
 app_config = {

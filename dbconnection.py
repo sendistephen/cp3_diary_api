@@ -8,7 +8,7 @@ class Connection:
     """Method handles database connection"""
 
     def __init__(self, database_url):
-        # try:
+        
         parsed_url = urlparse(database_url)
         dbname = parsed_url.path[1:]
         user = parsed_url.username
@@ -21,8 +21,7 @@ class Connection:
         self.connection.autocommit = True
         self.cursor = self.connection.cursor()
         pprint("Connection successfull")
-        # except:
-        #     pprint("Connection to db has failed.")
+        
 
     def create_tables(self):
         """This method handles creation of database tables"""
