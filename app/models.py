@@ -1,6 +1,5 @@
 import json
 from datetime import datetime
-
 from pytz import utc
 
 from dbconnection import Connection
@@ -28,7 +27,8 @@ class User:
 
     @staticmethod
     def create_user_account(username, email, password):
-        create_user_query = "INSERT INTO users (username, email, password) VALUES (%s,%s,%s)"
+        create_user_query = "INSERT INTO users \
+        (username, email, password) VALUES (%s,%s,%s)"
         connection.cursor.execute(
             create_user_query, (username, email, password))
 
@@ -73,13 +73,15 @@ class Entry:
 
     @staticmethod
     def create_entry(user_id, title, notes, date_created):
-        query_create_entry = "INSERT INTO entries(user_id, title, notes, date_created) VALUES (%s,%s,%s,%s)"
+        query_create_entry = "INSERT INTO entries(user_id, title, notes,\
+         date_created) VALUES (%s,%s,%s,%s)"
         connection.cursor.execute(
             query_create_entry, (user_id, title, notes, date_created))
 
     @staticmethod
     def get_entry_title(title, user_id):
-        query_select_entry = "SELECT title FROM entries WHERE title = %s AND user_id = %s"
+        query_select_entry = "SELECT title FROM entries \
+        WHERE title = %s AND user_id = %s"
         connection.cursor.execute(query_select_entry, [title, user_id])
         row = connection.cursor.fetchone()
         return row
@@ -89,11 +91,23 @@ class Entry:
         query_select_all_entries = "SELECT * FROM entries WHERE user_id = %s"
         connection.cursor.execute(query_select_all_entries, [user_id])
         rows = connection.cursor.fetchall()
-        return [{'id': row[0], 'title':row[2], 'notes':row[3], 'date-created':row[4]} for row in rows]
+        return [{'id': row[0], 'title':row[2], 'notes':row[3],
+                 'date-created':row[4]} for row in rows]
 
     @staticmethod
     def get_user_entry_by_id(entry_id, user_id):
-        query_to_get_single_entry = "SELECT * FROM entries WHERE entry_id= %s AND user_id=%s"
-        connection.cursor.execute(query_to_get_single_entry, (entry_id, user_id))
+        query_to_get_single_entry = "SELECT * FROM entries \
+        WHERE entry_id= %s AND user_id=%s"
+        connection.cursor.execute(
+            query_to_get_single_entry, (entry_id, user_id))
         row = connection.cursor.fetchone()
-        return [{'id': row[0],'title': row[2], 'notes':row[3], 'date-created':row[4]}]
+        return [{'id': row[0], 'title': row[2], 'notes':row[3],
+                 'date-created':row[4]}]
+
+    @staticmethod
+    def update_user_entry(user_id, entry_id, title, notes):
+        update_query = "UPDATE entries SET title = '{}', notes = '{}' \
+        WHERE entry_id='{}' AND user_id='{}'"\
+            .format(title, notes, entry_id, user_id)
+        row = connection.cursor.execute(update_query)
+        return row

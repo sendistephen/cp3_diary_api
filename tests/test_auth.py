@@ -4,18 +4,21 @@ from tests.base import BaseTestCase
 
 
 class AuthTestCase(BaseTestCase):
-    @unittest.skip('checking')
+    # @unittest.skip('checking')
     def test_user_registers_successfully(self):
         """Tests user can register successfully through the api"""
         with self.client:
             response = self.register_user(
-                'Sendi', 'test@test.com', 'testpassword')
+                'Sendi', 'test2@test.com', 'testpassword')
             result = json.loads(response.data.decode())
+            print(response.data)
             self.assertEqual(response.status_code, 201)
             self.assertEqual(result.get('message'),
                              'User successfully registered.')
-
-            res = self.register_user('Stephen', 'test@test.com', 'password')
+    def test_user_registers_with_email_already_taken(self):
+        with self.client:
+            self.register_user('Kamukama','test2@test.com','password')
+            res = self.register_user('Stephen', 'test2@test.com', 'password')
             data = json.loads(res.data.decode())
             self.assertEqual(res.status_code, 400)
             self.assertEqual(data.get('message'), 'Email already taken.')
