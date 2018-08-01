@@ -16,10 +16,10 @@ class EntriesTestCase(BaseTestCase):
             self.assertEqual(response.status_code, 201)
             self.assertEqual(result.get('message'),
                              'Entry recorded successfully.')
-
+    
             res = self.create_entry(
-                'Meeting with the CEO Andela',
-                'Discuss about security issues'
+                'Meeting with the CEO Twitter',
+                'Discuss about new marketing strategies'
             )
             result1 = json.loads(res.data.decode())
             self.assertEqual(res.status_code, 400)
