@@ -15,12 +15,12 @@ class BaseTestCase(unittest.TestCase):
 
         self.app = create_app()
         self.client = self.app.test_client()
-        db = Connection('postgres://admin:admin@localhost:5432/test_db')
+        db = Connection('postgresql://localhost/test_db')
         db.create_tables()
 
     def tearDown(self):
         """Drop any stored data in the list after every single test runs"""
-        db = Connection('postgres://admin:admin@localhost:5432/diary_db')
+        db = Connection('postgresql://localhost/test_db')
         db.trancate_table("users")
         db.trancate_table("entries")
 
