@@ -43,7 +43,7 @@ class Connection:
         self.connection.commit()
         self.connection.close()
 
-    def trancate_table(self, table):
+    def truncate_table(self, table):
         """Trancates the table"""
         self.cursor.execute(
             "TRUNCATE TABLE {} RESTART IDENTITY cascade ".format(table))
