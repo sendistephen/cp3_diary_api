@@ -11,13 +11,13 @@ class AuthTestCase(BaseTestCase):
             response = self.register_user(
                 'Sendi', 'test2@test.com', 'testpassword')
             result = json.loads(response.data.decode())
-            print(response.data)
             self.assertEqual(response.status_code, 201)
             self.assertEqual(result.get('message'),
                              'User successfully registered.')
+
     def test_user_registers_with_email_already_taken(self):
         with self.client:
-            self.register_user('Kamukama','test2@test.com','password')
+            self.register_user('Kamukama', 'test2@test.com', 'password')
             res = self.register_user('Stephen', 'test2@test.com', 'password')
             data = json.loads(res.data.decode())
             self.assertEqual(res.status_code, 400)
@@ -69,5 +69,17 @@ class AuthTestCase(BaseTestCase):
             result = json.loads(response.data.decode())
             self.assertEqual(response.status_code, 400)
             # self.assertTrue(result['access_token'])
+            self.assertEqual(
+                result.get(
+                    'message'),
+                'Email or password is invalid. Enter valid credentials')
+
+    def test_user_registers_with_invalid_username(self):
+        """Tests user can register successfully through the api"""
+        with self.client:
+            response = self.register_user(
+                'Se#nd@i', 'test2@test.com', 'testpassword')
+            result = json.loads(response.data.decode())
+            self.assertEqual(response.status_code, 400)
             self.assertEqual(result.get('message'),
-                             'Email or password is invalid. Enter valid credentials')
+                             'Invalid username.')
