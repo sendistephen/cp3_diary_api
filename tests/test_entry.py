@@ -16,7 +16,7 @@ class EntriesTestCase(BaseTestCase):
             self.assertEqual(response.status_code, 201)
             self.assertEqual(result.get('message'),
                              'Entry recorded successfully.')
-    
+
             res = self.create_entry(
                 'Meeting with the CEO Twitter',
                 'Discuss about new marketing strategies'
@@ -61,10 +61,22 @@ class EntriesTestCase(BaseTestCase):
 
             # verify that the result is success with 200 status code
             self.assertEqual(response.status_code, 200)
-    
+
     def test_user_has_no_entries(self):
         with self.client:
             response = self.get_all_entries()
             self.assertEqual(response.status_code, 200)
             result = json.loads(response.data.decode())
             self.assertTrue(result, None)
+
+    def test_user_updates_entry_successfully(self):
+        with self.client:
+            self.login_user("test@test.com", "password")
+            self.create_entry(
+                'Meeting with the CTO',
+                'Discuss about new business')
+            response = self.update_user_entry()
+            result = json.loads(response.data.decode())
+            self.assertEqual(response.status_code, 201)
+            self.assertEqual(result.get('message'),
+                             'Entry updated successfully.')
