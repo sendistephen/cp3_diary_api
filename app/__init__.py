@@ -4,7 +4,8 @@ from flask_restful import Api
 from dbconnection import Connection
 
 from config import app_config
-from app.views import RegisterResource, LoginResource, EntryListResource, EntryResource
+from app.views import (RegisterResource, LoginResource,
+                       EntryListResource, EntryResource)
 
 
 def create_app():
