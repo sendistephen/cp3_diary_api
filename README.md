@@ -1,5 +1,6 @@
 [![Build Status](https://travis-ci.com/SendiSteve/cp3_diary_api.svg?branch=develop)](https://travis-ci.com/SendiSteve/cp3_diary_api)
 [![Maintainability](https://api.codeclimate.com/v1/badges/1ca30df1db0d24dfe4ed/maintainability)](https://codeclimate.com/github/SendiSteve/cp3_diary_api/maintainability)
+[![Coverage Status](https://coveralls.io/repos/github/SendiSteve/cp3_diary_api/badge.svg?branch=develop)](https://coveralls.io/github/SendiSteve/cp3_diary_api?branch=develop)
 
 # Diary API
 This is a simple api that allows users to create, read, update and delete their diary entries. It uses  postgres database to persist the data.
