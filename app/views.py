@@ -34,21 +34,35 @@ class RegisterResource(Resource):
             return make_response(jsonify({
                 'message': 'Please enter a valid email.'}), 400)
 
+        if not re.match(r'^[\w.-]+$', username):
+            return make_response(jsonify({
+                'message': 'Invalid username.',
+                'status': 400
+            }), 400)
+
         if username.strip() == '' or len(username.strip()) < 3:
             return make_response(jsonify({
-                'message': 'Please enter a valid username.'}), 400)
+                'message': 'Please enter a valid username.',
+                'status': 400
+            }), 400)
 
         if password.strip() == '' or len(password.strip()) < 5:
             return make_response(jsonify({
-                'message': 'Please enter a valid password.'}), 400)
+                'message': 'Please enter a valid password.',
+                'status': 400
+            }), 400)
 
         if not email_exists:
             User.create_user_account(username, email, password)
             return make_response(jsonify({
-                'message': 'User successfully registered.'}), 201)
+                'message': 'User successfully registered.',
+                'status': 201
+            }), 201)
 
         return make_response(jsonify({
-            'message': 'Email already taken.'}), 400)
+            'message': 'Email already taken.',
+            'status': 400
+        }), 400)
 
 
 class LoginResource(Resource):
@@ -68,11 +82,13 @@ class LoginResource(Resource):
             access_token = create_access_token(
                 identity=email_exists)
             return make_response(jsonify({
+                'status': 200,
                 'message': 'Congratulations. Login successfully.',
                 'access_token': access_token}), 200)
 
         return make_response(jsonify({
-            'message': 'Email or password is invalid. Enter valid credentials'}
+            'message': 'Email or password is invalid. Enter valid credentials',
+            'status': 400}
         ), 400)
 
 
@@ -96,11 +112,16 @@ class EntryListResource(Resource):
         # validate user input here
         if len(title.strip()) < 4:
             return make_response(jsonify(
-                {'message': 'Please enter a valid entry.'}), 400)
+                {
+                    'message': 'Please enter a valid entry.',
+                    'status': 400}
+            ), 400)
 
         if len(notes.strip()) < 5:
             return make_response(jsonify(
-                {'message': 'Please enter notes with atleast 5 characters.'}),
+                {
+                    'message': 'Please enter notes with atleast 5 characters.',
+                    'status': 400}),
                 400)
 
         if not title_exists:
@@ -108,7 +129,9 @@ class EntryListResource(Resource):
             return make_response(jsonify({
                 'message': 'Entry recorded successfully.'}), 201)
         return make_response(jsonify(
-            {'message': 'Cannot have entries with the same title.'}), 400)
+            {'message': 'Cannot have entries with the same title.',
+             'status': 201}
+        ), 400)
 
     @jwt_required
     def get(self):
@@ -120,8 +143,8 @@ class EntryListResource(Resource):
             return make_response(jsonify({'Entries': entries}), 200)
         else:
             return make_response(jsonify({
-                'message': 'You dont have any entries at the moment'}),
-                200)
+                'message': 'You dont have any entries at the moment',
+                'status': 200}), 200)
 
 
 class EntryResource(Resource):
@@ -137,9 +160,11 @@ class EntryResource(Resource):
         entry = Entry.get_user_entry_by_id(entry_id, user_id[0])
         if entry:
             return make_response(jsonify({'Entry': entry}), 200)
-        else:
-            return make_response(jsonify({
-                'message': 'Entry with that id not found'}), 200)
+
+        return make_response(jsonify({
+            'message': 'Entry with that id not found',
+            'status': 200},
+        ), 200)
 
     @jwt_required
     def put(self, entry_id):
@@ -156,7 +181,8 @@ class EntryResource(Resource):
         user_id = get_jwt_identity()
 
         update = Entry.update_user_entry(user_id[0], entry_id, title, notes)
-        print(update)
 
         return make_response(jsonify({
-            'message': 'Entry updated successfully.'}), 201)
+            'message': 'Entry updated successfully.',
+            'status': 201},
+        ), 201)

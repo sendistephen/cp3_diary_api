@@ -12,7 +12,7 @@ class BaseTestCase(unittest.TestCase):
     def setUp(self):
         """Runs its code before every single test"""
         # Initialize the test client
-        
+
         self.app = create_app()
         self.client = self.app.test_client()
         db = Connection('postgres://admin:admin@localhost:5432/test_db')
@@ -20,7 +20,7 @@ class BaseTestCase(unittest.TestCase):
 
     def tearDown(self):
         """Drop any stored data in the list after every single test runs"""
-        db = Connection('postgres://admin:admin@localhost:5432/test_db')
+        db = Connection('postgres://admin:admin@localhost:5432/diary_db')
         db.trancate_table("users")
         db.trancate_table("entries")
 
@@ -35,7 +35,7 @@ class BaseTestCase(unittest.TestCase):
                 email=email,
                 password=password
             )), content_type='application/json')
-            
+
     def login_user(self, email, password):
         return self.client.post(
             'api/v2/auth/login',
@@ -44,7 +44,7 @@ class BaseTestCase(unittest.TestCase):
                 password=password
             )), content_type='application/json')
 
-    #------------------------Create Entry--------------------------------#
+    # ------------------------Create Entry--------------------------------#
     def create_entry(self, title, notes):
         return self.client.post(
             'api/v2/entries',
@@ -59,6 +59,14 @@ class BaseTestCase(unittest.TestCase):
             headers=self.generate_token()
         )
 
+    def update_user_entry(self):
+        return self.client.put(
+            'api/v2/entries/1',
+            data=json.dumps(dict(
+                title='Learning about OOP',
+                notes='Taking a full course for 2 months'
+            )), content_type='application/json', headers=self.generate_token())
+
     def generate_token(self):
         self.register_user('katikiro', 'sendi@gmail.com', 'password')
         response = self.login_user("sendi@gmail.com", "password")
@@ -67,5 +75,7 @@ class BaseTestCase(unittest.TestCase):
         token = result['access_token']
         authorization = {'Authorization': 'Bearer {}'.format(token)}
         return authorization
-if __name__=='__main__':
+
+
+if __name__ == '__main__':
     unittest.main()
