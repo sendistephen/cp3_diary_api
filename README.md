@@ -13,49 +13,52 @@ This is a simple api that allows users to create, read, update and delete their 
 4. Postgresql
 
 ## Getting Started
-These following instructions will help to set up the application on a local development machine.
+The following instructions will help to set up the application on a local development machine.
 
-1. Clone the repository
+1. Install Postgresql
+Follow the following steps to have postgres running on your local machine.
+
+* Install postgres: ``brew install postgresql``
+* In terminal type ``psql``.
+* In postgres interactive shell, type` ``CREATE DATABASE test_db;``
+* Update the database_uri  with the created database from steps above. Use postgres as your user`
+
+
+2. Clone the repository
 ```
 https://github.com/SendiSteve/cp3_diary_api.git```
 ```
 
-2. Navigate to the repository
+3. Navigate to the repository
 ```
 cd cp3_diary_api
 ``` 
 
-3. Create a virtual environment
+4. Create a virtual environment
 ```
 virtualenv venv
 ```
 
-4. Activate the virtual environment
+5. Activate the virtual environment
 ```
 source venv/bin/activate
 ```
 
-5. Install dependencies
+6. Install dependencies
 ```
 pip install -r requirements.txt
 ```
 
-```
-pip install autoenv
-```
 
-6. Environment Variables
-
-Create a .env file and add the following:
-
-```
-export APP_SETTINGS="development"
-export DATABASE_URL="postgres://admin:admin@localhost:5432/diary_db"
-```
-
-6. Run the application 
+7. Run the application 
 ```
 python run.py 
+```
+
+8. To run the tests  
+```
+# in root
+pytest 
 ```
 
 ## API End points
