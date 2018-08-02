@@ -15,4 +15,3 @@ class TestModelsTestcase(BaseTestCase):
                       title='I love dancing',
                       notes='I want to learn dance lessons')
         self.assertEqual(entry.title, 'I love dancing')
-    
