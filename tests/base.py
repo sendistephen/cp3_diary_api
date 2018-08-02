@@ -21,8 +21,8 @@ class BaseTestCase(unittest.TestCase):
     def tearDown(self):
         """Drop any stored data in the list after every single test runs"""
         db = Connection('postgresql://localhost/test_db')
-        db.trancate_table("users")
-        db.trancate_table("entries")
+        db.truncate_table("users")
+        db.truncate_table("entries")
 
     # ------------------------Register User--------------------------------#
 
