@@ -56,9 +56,10 @@ python run.py
 ```
 
 8. To run the tests  
+While in terminal
 ```
-# in root
-pytest 
+# in root directory
+run pytest 
 ```
 
 ## API End points
