@@ -13,6 +13,7 @@ class Config(object):
     DEBUG = False
     TESTING = False
 
+
 class ProductionConfig(Config):
     """Production configurations"""
     DEBUG = False  # should be set to false always
@@ -21,8 +22,7 @@ class ProductionConfig(Config):
 class DevelopmentConfig(Config):
     """Development configurations"""
     DEBUG = True
-    DATABASE_URI ='postgres://admin:admin@localhost:5432/diary_db'
-
+    DATABASE_URI = 'postgresql://localhost/test_db'
 
 
 class TestingConfig(Config):
@@ -30,8 +30,7 @@ class TestingConfig(Config):
     TESTING = True
     DEBUG = True
 
-    # DATABASE_URI ='postgresql://localhost/test_db'
-    DATABASE_URI='postgres://admin:admin@localhost:5432/test_db'
+    DATABASE_URI = 'postgresql://localhost/test_db'
 
 
 app_config = {

@@ -4,7 +4,7 @@ from pytz import utc
 
 from dbconnection import Connection
 
-connection = Connection('postgres://admin:admin@localhost:5432/diary_db')
+connection = Connection('postgresql://localhost/test_db')
 
 
 class User:
