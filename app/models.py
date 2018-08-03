@@ -18,6 +18,7 @@ class User:
 
     def json(self):
         """Representation of user object in json format"""
+
         return json.dumps({
             'id': self.id,
             'username': self.username,
@@ -27,6 +28,9 @@ class User:
 
     @staticmethod
     def create_user_account(username, email, password):
+        """Method handle query that adds a user to
+        the database"""
+
         create_user_query = "INSERT INTO users \
         (username, email, password) VALUES (%s,%s,%s)"
         connection.cursor.execute(
@@ -34,6 +38,9 @@ class User:
 
     @staticmethod
     def email_exists(email):
+        """Method handles a query that checks if a user
+         with an email exists already in the database"""
+
         select_query = "SELECT * FROM users WHERE email = %s"
         connection.cursor.execute(select_query, [email])
         row = connection.cursor.fetchone()
@@ -41,6 +48,9 @@ class User:
 
     @staticmethod
     def find_user_by_id(user_id):
+        """Method handles a query that retrieves a user
+         based on user id"""
+
         select_user_query = "SELECT * FROM users WHERE user_id = %s"
         connection.cursor.execute(select_user_query, [user_id])
         row = connection.cursor.fetchone()
@@ -48,6 +58,9 @@ class User:
 
     @staticmethod
     def valid_password(password):
+        """Method handles a query that checks if user
+         password is in the database"""
+
         select_password_query = "SELECT * FROM users WHERE password = %s"
         connection.cursor.execute(select_password_query, [password])
         row = connection.cursor.fetchone()
@@ -55,6 +68,8 @@ class User:
 
 
 class Entry:
+    """This class represents the entry object"""
+
     def __init__(self, entry_id, user_id, title, notes):
         self.id = entry_id
         self.user_id = user_id
@@ -63,6 +78,8 @@ class Entry:
         self.date_created = datetime.now(utc)
 
     def json(self):
+        """Representation of entry object in json format"""
+
         return json.dumps({
             'id': self.id,
             'user_id': self.user_id,
@@ -73,6 +90,9 @@ class Entry:
 
     @staticmethod
     def create_entry(user_id, title, notes, date_created):
+        """Method handle query that adds an entry to
+        the database"""
+
         query_create_entry = "INSERT INTO entries(user_id, title, notes,\
          date_created) VALUES (%s,%s,%s,%s)"
         connection.cursor.execute(
@@ -80,6 +100,9 @@ class Entry:
 
     @staticmethod
     def get_entry_title(title, user_id):
+        """Method handles query that gets user
+         entry based on its title"""
+
         query_select_entry = "SELECT title FROM entries \
         WHERE title = %s AND user_id = %s"
         connection.cursor.execute(query_select_entry, [title, user_id])
@@ -88,6 +111,8 @@ class Entry:
 
     @staticmethod
     def get_all_entries(user_id):
+        """Method handles query that retrieves all user entries"""
+
         query_select_all_entries = "SELECT * FROM entries WHERE user_id = %s"
         connection.cursor.execute(query_select_all_entries, [user_id])
         rows = connection.cursor.fetchall()
@@ -96,6 +121,9 @@ class Entry:
 
     @staticmethod
     def get_user_entry_by_id(entry_id, user_id):
+        """Method handles query that retrieves a
+        user by its id"""
+
         query_to_get_single_entry = "SELECT * FROM entries \
         WHERE entry_id= %s AND user_id=%s"
         connection.cursor.execute(
@@ -108,6 +136,8 @@ class Entry:
 
     @staticmethod
     def update_user_entry(user_id, entry_id, title, notes):
+        """Method handles a query that updates a user entry"""
+
         update_query = "UPDATE entries SET title = '{}', notes = '{}' \
         WHERE entry_id='{}' AND user_id='{}'"\
             .format(title, notes, entry_id, user_id)
