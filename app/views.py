@@ -180,9 +180,33 @@ class EntryResource(Resource):
 
         user_id = get_jwt_identity()
 
-        update = Entry.update_user_entry(user_id[0], entry_id, title, notes)
+        title_exists = Entry.get_entry_title(title, user_id[0])
 
+        date_created = datetime.now(utc)
+
+        # validate user input here
+        if len(title.strip()) < 4:
+            return make_response(jsonify(
+                {
+                    'message': 'Please enter a valid entry.',
+                    'status': 400}
+            ), 400)
+
+        if len(notes.strip()) < 5:
+            return make_response(jsonify(
+                {
+                    'message': 'Please enter notes with atleast 5 characters.',
+                    'status': 400}),
+                400)
+        if not title_exists:
+            update = Entry.update_user_entry(user_id[0],
+                                             entry_id, title, notes)
+
+            return make_response(jsonify({
+                'message': 'Entry updated successfully.',
+                'status': 201},
+            ), 201)
         return make_response(jsonify({
-            'message': 'Entry updated successfully.',
-            'status': 201},
-        ), 201)
+                'message': 'Entry exists already.',
+                'status': 400},
+            ), 400)
