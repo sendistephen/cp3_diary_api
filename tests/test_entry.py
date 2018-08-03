@@ -7,6 +7,7 @@ class EntriesTestCase(BaseTestCase):
 
     # @unittest.skip('checking')
     def test_user_creates_entry_successfully(self):
+        """Tests user can create an entry successfully"""
         with self.client:
             self.login_user("test@test.com", "password")
             response = self.create_entry(
@@ -27,6 +28,7 @@ class EntriesTestCase(BaseTestCase):
                 'message'), 'Cannot have entries with the same title.')
 
     def test_entry_title_is_black(self):
+        """Tests user can not create entry with black title"""
         with self.client:
             self.login_user("test@test.com", "password")
             response = self.create_entry(
@@ -38,6 +40,7 @@ class EntriesTestCase(BaseTestCase):
                              'Please enter a valid entry.')
 
     def test_entry_notes_is_black_or_has_few_characters(self):
+        """Tests user can create entry with notes blank"""
         with self.client:
             self.login_user("test@test.com", "password")
             response = self.create_entry(
@@ -63,6 +66,7 @@ class EntriesTestCase(BaseTestCase):
             self.assertEqual(response.status_code, 200)
 
     def test_user_has_no_entries(self):
+        """Test when user has no entries created"""
         with self.client:
             response = self.get_all_entries()
             self.assertEqual(response.status_code, 200)
@@ -70,6 +74,7 @@ class EntriesTestCase(BaseTestCase):
             self.assertTrue(result, None)
 
     def test_user_updates_entry_successfully(self):
+        """Test user can update an entry"""
         with self.client:
             self.login_user("test@test.com", "password")
             self.create_entry(
@@ -82,6 +87,7 @@ class EntriesTestCase(BaseTestCase):
                              'Entry updated successfully.')
 
     def test_user_can_get_single_entry(self):
+        """Test user can get a single entry"""
         with self.client:
             self.login_user("test@test.com", "password")
 
@@ -96,6 +102,7 @@ class EntriesTestCase(BaseTestCase):
             self.assertEqual(response.status_code, 200)
 
     def test_user_can_get_single_entry_with_invalid_id(self):
+        """Test user can not get entry using an invalid id"""
         with self.client:
             self.login_user("test@test.com", "password")
 
