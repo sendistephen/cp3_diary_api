@@ -94,4 +94,27 @@ class EntriesTestCase(BaseTestCase):
 
             # verify that the result is success with 200 status code
             self.assertEqual(response.status_code, 200)
-    
+
+    def test_user_can_get_single_entry(self):
+        with self.client:
+            self.login_user("test@test.com", "password")
+
+            self.create_entry(
+                "Meeting with Jango girls",
+                "Discuss about how to improve the group")
+
+            # retrieve the created entry
+            response = self.get_single_entry_with_invalid_id()
+
+            # verify that the result is success with 200 status code
+            self.assertEqual(response.status_code, 400)
+
+    def test_user_updates_entry_with_invalid_entry_id(self):
+        with self.client:
+            self.login_user("test@test.com", "password")
+            self.get_single_entry_with_invalid_id()
+            response = self.update_user_entry()
+            result = json.loads(response.data.decode())
+            self.assertEqual(response.status_code, 400)
+            self.assertEqual(result.get('message'),
+                             'Entry with that id not found.')

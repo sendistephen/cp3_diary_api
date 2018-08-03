@@ -163,8 +163,8 @@ class EntryResource(Resource):
         if entry is None:
             return make_response(jsonify({
                 'message': 'Entry with that id not found',
-                'status': 200},
-            ), 200)
+                'status': 400},
+            ), 400)
 
     @jwt_required
     def put(self, entry_id):

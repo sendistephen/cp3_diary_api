@@ -74,6 +74,13 @@ class BaseTestCase(unittest.TestCase):
             headers=self.generate_token()
         )
 
+    def get_single_entry_with_invalid_id(self):
+        return self.client.get(
+            'api/v2/entries/9',
+            content_type='application/json',
+            headers=self.generate_token()
+        )
+
     def generate_token(self):
         self.register_user('katikiro', 'sendi@gmail.com', 'password')
         response = self.login_user("sendi@gmail.com", "password")
