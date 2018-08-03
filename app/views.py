@@ -10,20 +10,21 @@ from app.models import User, Entry
 
 
 class RegisterResource(Resource):
-    """ Defines endpoints for method calls for a user
-        methods: GET, POST
-        url: /api/auth/register
-        url: /api/auth/login
+    """ Defines endpoint for method call for a user
+        methods: POST
+        url: /api/v2/auth/register
      """
+
+    parser = reqparse.RequestParser()
+    parser.add_argument('username', type=str, required=True)
+    parser.add_argument('email', type=str, required=True)
+    parser.add_argument('password', type=str, required=True)
 
     def post(self):
         """Handles registration of a new user"""
-        parser = reqparse.RequestParser()
-        parser.add_argument('username', type=str, required=True)
-        parser.add_argument('email', type=str, required=True)
-        parser.add_argument('password', type=str, required=True)
 
-        args = parser.parse_args()
+        args = RegisterResource.parser.parse_args()
+
         username = args['username']
         email = args['email']
         password = args['password']
@@ -66,12 +67,19 @@ class RegisterResource(Resource):
 
 
 class LoginResource(Resource):
-    def post(self):
-        parser = reqparse.RequestParser()
-        parser.add_argument('email', type=str, required=True)
-        parser.add_argument('password', type=str, required=True)
+    """ Defines endpoint for method call for a user
+        methods:  POST
+        url: /api/v2/auth/login
+     """
+    parser = reqparse.RequestParser()
+    parser.add_argument('email', type=str, required=True)
+    parser.add_argument('password', type=str, required=True)
 
-        args = parser.parse_args()
+    def post(self):
+        """Handles login of a user"""
+
+        args = LoginResource.parser.parse_args()
+
         email = args['email']
         password = args['password']
 
@@ -93,13 +101,21 @@ class LoginResource(Resource):
 
 
 class EntryListResource(Resource):
+    """ Defines endpoint for method call for Entry
+        methods:  POST, GET
+        url: /api/v2/entries
+     """
+
+    parser = reqparse.RequestParser()
+    parser.add_argument('title', type=str, required=True)
+    parser.add_argument('notes', type=str, required=True)
+
     @jwt_required
     def post(self):
-        parser = reqparse.RequestParser()
-        parser.add_argument('title', type=str, required=True)
-        parser.add_argument('notes', type=str, required=True)
+        """Handles creation of an entry"""
 
-        args = parser.parse_args()
+        args = EntryListResource.parser.parse_args()
+
         title = args['title']
         notes = args['notes']
 
@@ -136,6 +152,7 @@ class EntryListResource(Resource):
     @jwt_required
     def get(self):
         """Returns all user entries"""
+
         user_id = get_jwt_identity()
 
         entries = Entry.get_all_entries(user_id[0])
@@ -152,6 +169,9 @@ class EntryResource(Resource):
         methods: GET, PUT, DELETE
         url: /api/v2/entries/<entry_id>
      """
+    parser = reqparse.RequestParser()
+    parser.add_argument('title', type=str, required=True)
+    parser.add_argument('notes', type=str, required=True)
 
     @jwt_required
     def get(self, entry_id):
@@ -170,11 +190,8 @@ class EntryResource(Resource):
     def put(self, entry_id):
         """Handles update of a single entry"""
 
-        parser = reqparse.RequestParser()
-        parser.add_argument('title', type=str, required=True)
-        parser.add_argument('notes', type=str, required=True)
+        args = EntryResource.parser.parse_args()
 
-        args = parser.parse_args()
         title = args['title']
         notes = args['notes']
 
