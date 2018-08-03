@@ -206,7 +206,14 @@ class EntryResource(Resource):
                 'message': 'Entry updated successfully.',
                 'status': 201},
             ), 201)
+            if not update:
+                return make_response(jsonify(
+                    {
+                        'message': 'Entry with that id not found.',
+                        'status': 400}),
+                    400)
+
         return make_response(jsonify({
-                'message': 'Entry exists already.',
-                'status': 400},
-            ), 400)
+            'message': 'Entry exists already.',
+            'status': 400},
+        ), 400)

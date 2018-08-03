@@ -112,4 +112,6 @@ class Entry:
         WHERE entry_id='{}' AND user_id='{}'"\
             .format(title, notes, entry_id, user_id)
         row = connection.cursor.execute(update_query)
+        if not row:
+            return None
         return row
