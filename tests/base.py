@@ -37,6 +37,7 @@ class BaseTestCase(unittest.TestCase):
             )), content_type='application/json')
 
     def login_user(self, email, password):
+        """Method handles user login"""
         return self.client.post(
             'api/v2/auth/login',
             data=json.dumps(dict(
@@ -46,6 +47,7 @@ class BaseTestCase(unittest.TestCase):
 
     # ------------------------Create Entry--------------------------------#
     def create_entry(self, title, notes):
+        """Method creates a new entry"""
         return self.client.post(
             'api/v2/entries',
             data=json.dumps(dict(
@@ -54,12 +56,14 @@ class BaseTestCase(unittest.TestCase):
             )), content_type='application/json', headers=self.generate_token())
 
     def get_all_entries(self):
+        """Method helps in retrieval of all entries"""
         return self.client.get(
             'api/v2/entries', content_type='application/json',
             headers=self.generate_token()
         )
 
     def update_user_entry(self):
+        """Method helps in update of an entry"""
         return self.client.put(
             'api/v2/entries/1',
             data=json.dumps(dict(
@@ -68,6 +72,7 @@ class BaseTestCase(unittest.TestCase):
             )), content_type='application/json', headers=self.generate_token())
 
     def get_single_entry(self):
+        """Method hepls in retrieval of a single entry"""
         return self.client.get(
             'api/v2/entries/1',
             content_type='application/json',
@@ -75,6 +80,8 @@ class BaseTestCase(unittest.TestCase):
         )
 
     def get_single_entry_with_invalid_id(self):
+        """Method handles retrieval of a single entry
+        with id that doesnot exist"""
         return self.client.get(
             'api/v2/entries/9',
             content_type='application/json',
@@ -82,6 +89,7 @@ class BaseTestCase(unittest.TestCase):
         )
 
     def generate_token(self):
+        """Method helps in generation of a valid token"""
         self.register_user('katikiro', 'sendi@gmail.com', 'password')
         response = self.login_user("sendi@gmail.com", "password")
         result = json.loads(response.data.decode())
