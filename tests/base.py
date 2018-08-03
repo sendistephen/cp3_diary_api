@@ -67,6 +67,13 @@ class BaseTestCase(unittest.TestCase):
                 notes='Taking a full course for 2 months'
             )), content_type='application/json', headers=self.generate_token())
 
+    def get_single_entry(self):
+        return self.client.get(
+            'api/v2/entries/1',
+            content_type='application/json',
+            headers=self.generate_token()
+        )
+
     def generate_token(self):
         self.register_user('katikiro', 'sendi@gmail.com', 'password')
         response = self.login_user("sendi@gmail.com", "password")
