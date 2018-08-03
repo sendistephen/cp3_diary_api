@@ -16,6 +16,7 @@ class AuthTestCase(BaseTestCase):
                              'User successfully registered.')
 
     def test_user_registers_with_email_already_taken(self):
+        """Test user can not register with an email that already exists."""
         with self.client:
             self.register_user('Kamukama', 'test2@test.com', 'password')
             res = self.register_user('Stephen', 'test2@test.com', 'password')
@@ -53,6 +54,7 @@ class AuthTestCase(BaseTestCase):
                              'Please enter a valid password.')
 
     def test_login_user_successfully(self):
+        """Test user can login with valid credentials"""
         with self.client:
             self.register_user('Kakaire', 'test@test.com', 'testpassword')
             response = self.login_user('test@test.com', 'testpassword')
@@ -63,6 +65,7 @@ class AuthTestCase(BaseTestCase):
                              'Congratulations. Login successfully.')
 
     def test_login_user_wrong_password_or_email(self):
+        """Test user can not login with invalid password or email"""
         with self.client:
             self.register_user('Moses', 'moses@test.com', 'password')
             response = self.login_user('test1@test.com', 'password')
@@ -75,7 +78,7 @@ class AuthTestCase(BaseTestCase):
                 'Email or password is invalid. Enter valid credentials')
 
     def test_user_registers_with_invalid_username(self):
-        """Tests user can register successfully through the api"""
+        """Tests user can register with invalid username through the api"""
         with self.client:
             response = self.register_user(
                 'Se#nd@i', 'test2@test.com', 'testpassword')
