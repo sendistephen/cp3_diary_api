@@ -21,12 +21,6 @@ omit =
       *numbers.py*
       *pydoc.py*
       *http/*
-      *app/api/user/__init__.py*
-      *app/api/request/__init__.py*
-      *app/api/__init__.py*
-      *app/__init__.py*
-      *app/config.py*
-      *app/api/models/*
       *tests/*
       *html/*
       *typing.py*
