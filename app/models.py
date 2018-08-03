@@ -101,6 +101,8 @@ class Entry:
         connection.cursor.execute(
             query_to_get_single_entry, (entry_id, user_id))
         row = connection.cursor.fetchone()
+        if not row:
+            return None
         return [{'id': row[0], 'title': row[2], 'notes':row[3],
                  'date-created':row[4]}]
 
